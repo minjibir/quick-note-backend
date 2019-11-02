@@ -1,0 +1,29 @@
+{
+  "name": "quick-note-backend",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "export NODE_ENV=test && jest --watchAll --verbose"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "dependencies": {
+    "@hapi/joi": "^16.1.7",
+    "config": "^3.2.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "helmet": "^3.21.2",
+    "lodash": "^4.17.15",
+    "mongoose": "^5.7.7",
+    "morgan": "~1.9.1",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "jest": "^24.9.0",
+    "nodemon": "^1.19.4",
+    "supertest": "^4.0.2"
+  }
+}
