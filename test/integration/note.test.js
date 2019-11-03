@@ -184,4 +184,57 @@ describe(endpoint, () => {
 
   });
 
+  describe('put', () => {
+    beforeEach(async () => {
+      app = require('../../app');
+      id0 = mongoose.Types.ObjectId();
+
+      note0 = new Note({
+        _id: id0,
+        text: 'First testing note.'
+      });
+
+      await Note.insertMany([note0, note1]);
+    });
+
+    afterEach(async () => {
+      await Note.deleteMany({});
+      app.close();
+    });
+
+    it('should return 400 with invalid note ID', async () => {
+      const response = await request(app)
+        .put(endpoint)
+        .send({ _id: '1', text: 'ab' });
+
+      expect(response.status).toBe(400);
+      expect(
+        response.body.error.toLowerCase()
+          .includes('length must be at least 10 characters long') ||
+        response.body.error.toLowerCase()
+          .includes('Invalid note ID')
+      ).toBeTruthy();
+    });
+
+    it('should return 400 if there\'s invalid or no text property in the object', async () => {
+      const response = await request(app)
+        .put(endpoint)
+        .send({ _id: mongoose.Types.ObjectId() });
+
+      expect(response.status).toBe(400);
+      expect(response.body.error).toContain('"text" is required');
+    });
+
+    it('should modify the note and return the updated one', async () => {
+      note0.text = 'Modified testing note';
+
+      const response = await request(app)
+        .put(endpoint)
+        .send(note0);
+
+      expect(response.status).toBe(200);
+      expect(response.body._id).toContain(note0._id);
+      expect(response.body.text).toContain('Modified testing note');
+    });
+  })
 });

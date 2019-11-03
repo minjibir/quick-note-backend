@@ -98,4 +98,38 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+router.put('/', async (req, res) => {
+  const body = req.body;
+  const { error, value } = validate(body);
+
+  if (error || !mongoose.Types.ObjectId.isValid(body._id)) {
+    const errorMsg = error.message || 'Invalid note ID';
+
+    return res
+      .status(400)
+      .json({ error: errorMsg });
+  }
+
+  try {
+    const note = await Note.findById(value._id);
+
+    if (!note) {
+      return res
+        .status(404)
+        .json({ error: 'Note with the specified ID does not exists.' });
+    } else {
+      await Note.findByIdAndUpdate(value._id, value);
+      const updated = await Note.findById(value._id);
+
+      res
+        .status(200)
+        .json(updated);
+    }
+  } catch (err) {
+    res
+      .status(500)
+      .json({ error: err.message });
+  }
+});
+
 module.exports = router;
