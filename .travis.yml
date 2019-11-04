@@ -11,6 +11,9 @@ cache:
   directories:
     - node_modules
 
+before_script: # Artificial delay to allow MongoDB to prepare.
+  - sleep 15
+
 script:
   - npm test
 
