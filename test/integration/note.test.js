@@ -12,6 +12,9 @@ let note0;
 let note1;
 
 describe(endpoint, () => {
+  afterAll(async () => {
+    mongoose.disconnect();
+  });
 
   describe('get', () => {
     beforeEach(async () => {
@@ -36,6 +39,7 @@ describe(endpoint, () => {
     afterEach(async () => {
       await Note.deleteMany({});
       app.close();
+
     });
 
     it('all should return the list of all notes.', async () => {
@@ -87,6 +91,7 @@ describe(endpoint, () => {
     afterEach(async () => {
       await Note.deleteMany({});
       app.close();
+
     });
 
     it(`should create new note and return it as a response`, async () => {
@@ -159,6 +164,7 @@ describe(endpoint, () => {
     afterEach(async () => {
       await Note.deleteMany({});
       app.close();
+
     });
 
     it('should return 404 with invalid note ID error', async () => {
@@ -200,6 +206,7 @@ describe(endpoint, () => {
     afterEach(async () => {
       await Note.deleteMany({});
       app.close();
+
     });
 
     it('should return 400 with invalid note ID', async () => {
