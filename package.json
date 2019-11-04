@@ -5,7 +5,10 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "export NODE_ENV=test && jest --watchAll --verbose"
+    "test": "jest"
+  },
+  "repository": {
+    "url": "https://github/minjibir/quick-note-backend.git"
   },
   "jest": {
     "testEnvironment": "node"
@@ -13,7 +16,6 @@
   "dependencies": {
     "@hapi/joi": "^16.1.7",
     "config": "^3.2.4",
-    "debug": "~2.6.9",
     "express": "~4.16.1",
     "helmet": "^3.21.2",
     "lodash": "^4.17.15",

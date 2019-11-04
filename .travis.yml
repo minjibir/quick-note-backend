@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+  - lts/*  # Most recent LTS version
+
+cache:
+  directories:
+    - node_modules
+
+script:
+  - npm test
+
+deploy:
+  proivder: heroku
+  api_key:
+    secure: "383b1899-525b-48d2-81ab-c8fe7355d59c"
+  on: 
+    branch: master
+    
