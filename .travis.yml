@@ -1,6 +1,10 @@
 language: node_js
+
 node_js:
-  - lts/*  # Most recent LTS version
+  - lts/*
+
+services:
+  - docker
 
 cache:
   directories:
@@ -9,10 +13,14 @@ cache:
 script:
   - npm test
 
+before_deploy:
+  - echo "$DH_PWORD" | docker login -u "$DH_UNAME" --password-stdin
+  - docker build -t quicknote .
+  - docker images
+  - docker tag quicknote $DH_UNAME/quicknote
+
 deploy:
-  proivder: heroku
-  api_key:
-    secure: "383b1899-525b-48d2-81ab-c8fe7355d59c"
-  on: 
+  provider: script
+  script: docker push $DH_UNAME/quicknote
+  on:
     branch: master
-    
