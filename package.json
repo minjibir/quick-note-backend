@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app.js",
+    "start": "export NODE_ENV=production && node app.js",
     "dev": "nodemon app.js",
-    "test": "jest"
+    "test": "export NODE_ENV=test && jest --verbose"
   },
   "repository": {
     "url": "https://github/minjibir/quick-note-backend.git"
