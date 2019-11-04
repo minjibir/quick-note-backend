@@ -1,6 +1,6 @@
 {
   "db": {
-    "url": "mongodb+srv://jminjibir:PassWord@konnekt-4sr4d.gcp.mongodb.net/quick-note-db?retryWrites=true&w=majority",
+    "url": "mongodb://127.0.0.1:27017/quicknote-db",
     "scope": "production"
   }
 }

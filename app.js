@@ -29,4 +29,4 @@ app.get('/', async (req, res) => {
     .json({ result: 'Index page of Quick Note App' });
 });
 
-module.exPORTs = app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+module.exports = app.listen(PORT, () => console.log(`Server running on ${PORT}`));
