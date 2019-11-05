@@ -18,6 +18,7 @@ script:
   - npm test
 
 before_deploy:
+  - docker logout
   - echo "$DH_PWORD" | docker login -u "$DH_UNAME" --password-stdin
   - docker build -t quicknote .
   - docker images
