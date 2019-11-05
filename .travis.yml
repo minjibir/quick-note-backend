@@ -29,3 +29,6 @@ deploy:
   script: docker push $DH_UNAME/quicknote
   on:
     branch: master
+
+after_deploy:
+  docker logout
