@@ -4,131 +4,82 @@ const { Note, validate } = require('../models/note.model');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  try {
-    const notes = await Note.find({});
-
-    res
-      .status(200)
-      .json(notes);
-  } catch (err) {
-    res
-      .status(500)
-      .json({ error: err.message });
-  }
+  const notes = await Note.find({});
+  res.status(200).json(notes);
 });
 
 router.get('/:id', async (req, res) => {
   const id = req.params.id;
 
+  // Probably should be removed to let system wide exception catch it.
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res
       .status(404)
       .json({ error: `Invalid note id.` });
   }
 
-  try {
-    const note = await Note.findById(id);
+  const note = await Note.findById(id);
 
-    if (note) {
-      res
-        .status(200)
-        .json(note);
-    } else {
-      res
-        .status(404)
-        .json({ error: 'Note with that ID does not exists.' });
-    }
-  } catch (err) {
+  if (note) {
+    res
+      .status(200)
+      .json(note);
+  } else {
     res
       .status(404)
-      .json({ error: err.message });
+      .json({ error: 'Note with that ID does not exists.' });
   }
+
 });
 
 router.post('/', async (req, res) => {
-  const reqBody = req.body;
-  const { error, value } = validate(reqBody);
+  const { error, value } = validate(req.body);
 
   if (error) {
-    return res
-      .status(400)
-      .json({ error: error.message });
+    return res.status(400).json({ error: error.message });
   }
 
-  try {
-    const note = await Note.create(value);
-
-    res
-      .status(201)
-      .json(note);
-  } catch (err) {
-    res
-      .status(400)
-      .json({ error: err.message });
-  }
+  const note = await Note.create(value);
+  return res.status(201).json(note);
 });
 
 router.delete('/:id', async (req, res) => {
   const id = req.params.id;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res
-      .status(404)
-      .json({ error: 'Invalid note ID' })
+    return res.status(404).json({ error: 'Invalid note ID' });
   }
 
-  try {
-    const note = await Note.findById(id);
+  const note = await Note.findById(id);
 
-    if (note) {
-      await Note.deleteOne({ _id: id });
+  if (note) {
+    await Note.deleteOne({ _id: id });
 
-      res
-        .status(200)
-        .json({ message: 'Note successfully deleted.' })
-    } else {
-      res
-        .status(404)
-        .json({ error: 'Note with this ID does not exists.' });
-    }
-  } catch (err) {
     res
-      .status(500)
-      .json({ error: err.message });
+      .status(200)
+      .json({ message: 'Note successfully deleted.' })
+  } else {
+    res
+      .status(404)
+      .json({ error: 'Note with this ID does not exists.' });
   }
 });
 
 router.put('/', async (req, res) => {
-  const body = req.body;
-  const { error, value } = validate(body);
+  const { error, value } = validate(req.body);
 
-  if (error || !mongoose.Types.ObjectId.isValid(body._id)) {
-    const errorMsg = error.message || 'Invalid note ID';
-
-    return res
-      .status(400)
-      .json({ error: errorMsg });
+  if (error) {
+    return res.status(400).json({ error: error.message });
   }
 
-  try {
-    const note = await Note.findById(value._id);
+  const note = await Note.findById(value._id);
 
-    if (!note) {
-      return res
-        .status(404)
-        .json({ error: 'Note with the specified ID does not exists.' });
-    } else {
-      await Note.findByIdAndUpdate(value._id, value);
-      const updated = await Note.findById(value._id);
-
-      res
-        .status(200)
-        .json(updated);
-    }
-  } catch (err) {
-    res
-      .status(500)
-      .json({ error: err.message });
+  if (!note) {
+    return res.status(404).json({ error: 'Note with the specified ID does not exists.' });
+  } else {
+    await Note.findByIdAndUpdate(value._id, value);
+    const updated = await Note.findById(value._id);
+    res.status(200).json(updated);
   }
 });
 

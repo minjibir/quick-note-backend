@@ -3,9 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "export NODE_ENV=production && node app.js",
-    "dev": "export NODE_ENV=dev && nodemon app.js",
-    "test": "export NODE_ENV=test && jest --detectOpenHandles --verbose"
+    "prestart": "cross-env NODE_ENV=production",
+    "start": "node app.js",
+    "dev": "cross-env NODE_ENV=dev && nodemon app.js",
+    "pretest": "cross-env NODE_ENV=test",
+    "test": "jest --watchAll --detectOpenHandles --verbose"
   },
   "repository": {
     "url": "https://github/minjibir/quick-note-backend.git"
@@ -16,8 +18,11 @@
   "dependencies": {
     "@hapi/joi": "^16.1.7",
     "config": "^3.2.4",
+    "cross-env": "^6.0.3",
     "express": "~4.16.1",
+    "express-async-errors": "^3.1.1",
     "helmet": "^3.21.2",
+    "joi-objectid": "^3.0.1",
     "lodash": "^4.17.15",
     "mongoose": "^5.7.7",
     "morgan": "~1.9.1",

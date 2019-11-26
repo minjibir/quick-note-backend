@@ -1,6 +1,6 @@
 {
   "db": {
-    "url": "mongodb://127.0.0.1:27017/quicknote-testdb",
+    "url": "mongodb://192.168.99.100:27017/quicknote-testdb",
     "scope": "test"
   }
 }

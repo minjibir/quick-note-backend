@@ -90,8 +90,7 @@ describe(endpoint, () => {
 
     afterEach(async () => {
       await Note.deleteMany({});
-      app.close();
-
+      await app.close();
     });
 
     it(`should create new note and return it as a response`, async () => {
@@ -100,7 +99,7 @@ describe(endpoint, () => {
         .send(_.pick(note0, ['text']));
 
       expect(response.status).toBe(201);
-      expect(response.body._id).not.toBeNull()
+      expect(response.body._id).not.toBeNull();
       expect(response.header).not.toBeNull();
     });
 
@@ -120,7 +119,7 @@ describe(endpoint, () => {
 
       expect(response.status).toBe(400);
       expect(response.body.error).toContain('must be at least 3 characters long');
-    })
+    });
 
     it(`should reject with status 400 and "text" exceeding max length error`, async () => {
       const text = `Lorem Ipsum is simply dummy text of the printing and typesetting industry.
@@ -212,15 +211,20 @@ describe(endpoint, () => {
     it('should return 400 with invalid note ID', async () => {
       const response = await request(app)
         .put(endpoint)
-        .send({ _id: '1', text: 'ab' });
+        .send({ _id: '1', text: 'abcdefghijklmnopqrstuvwxyz' });
 
       expect(response.status).toBe(400);
-      expect(
-        response.body.error.toLowerCase()
-          .includes('length must be at least 10 characters long') ||
-        response.body.error.toLowerCase()
-          .includes('Invalid note ID')
-      ).toBeTruthy();
+      expect(response.body.error.toLowerCase()).toContain('fails to match the valid mongo id pattern');
+    });
+
+    it('should return 400 with invalid note ID', async () => {
+      const response = await request(app)
+        .put(endpoint)
+        .send({ _id: mongoose.Types.ObjectId(), text: 'ab' });
+
+      expect(response.status).toBe(400);
+      expect(response.body.error.toLowerCase()).toContain('length must be at least');
+      expect(response.body.error.toLowerCase()).toContain('characters long');
     });
 
     it('should return 400 if there\'s invalid or no text property in the object', async () => {
@@ -243,5 +247,5 @@ describe(endpoint, () => {
       expect(response.body._id).toContain(note0._id);
       expect(response.body.text).toContain('Modified testing note');
     });
-  })
+  });
 });
