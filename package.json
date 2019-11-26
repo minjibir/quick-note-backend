@@ -7,7 +7,7 @@
     "start": "node app.js",
     "dev": "cross-env NODE_ENV=dev && nodemon app.js",
     "pretest": "cross-env NODE_ENV=test",
-    "test": "cross-env NODE_ENV=tes && jest --watchAll --detectOpenHandles --verbose"
+    "test": "jest --watchAll --detectOpenHandles --verbose"
   },
   "repository": {
     "url": "https://github/minjibir/quick-note-backend.git"
