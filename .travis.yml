@@ -20,7 +20,7 @@ script:
 before_deploy:
   - docker logout
   - echo "$DH_PWORD" | docker login -u "$DH_UNAME" --password-stdin
-  - docker build -t quicknote .
+  - travis_wait docker build -t quicknote .
   - docker images
   - docker tag quicknote $DH_UNAME/quicknote
 
