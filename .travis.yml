@@ -18,6 +18,7 @@ script:
   - npm test
 
 before_deploy:
+  - docker login
   - echo "$DH_PWORD" | docker login -u "$DH_UNAME"
   - travis_wait docker build -t quicknote .
   - docker images
