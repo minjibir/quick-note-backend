@@ -18,8 +18,8 @@ script:
   - npm test
 
 before_deploy:
-  - docker login
-  - echo "$DH_PWORD" | docker login -u "$DH_UNAME"
+  - docker logout
+  - docker login -u "$DH_UNAME" -p "$DH_PWORD"
   - travis_wait docker build -t quicknote .
   - docker images
   - docker tag quicknote $DH_UNAME/quicknote
