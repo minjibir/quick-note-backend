@@ -19,14 +19,14 @@ script:
 
 before_deploy:
   - docker logout
-  - docker login -u "$DH_UNAME" -p "$DH_PWORD"
+  - docker login -u "$HEROKU_UNAME" -p "$HEROKU_API_KEY" registry.heroku.com
   - travis_wait docker build -t quicknote .
   - docker images
-  - docker tag quicknote $DH_UNAME/quicknote
+  - docker tag quicknote registry.heroku.com/quicknote
 
 deploy:
   provider: script
-  script: docker push $DH_UNAME/quicknote
+  script: docker push registry.heroku.com/quicknote
   on:
     branch: master
 
